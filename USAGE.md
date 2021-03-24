@@ -1,4 +1,5 @@
 ### setup env
+ setup the environment using the default IBFT genesis account and key (these are not secrets)
 ```
   export ACCOUNTS=200
   export NODES=4
