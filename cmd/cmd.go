@@ -22,6 +22,14 @@ import (
 	"time"
 )
 
+var parentAddress string
+var parentAddressPrivateKey string
+
+type CreatedAccounts struct {
+	address string
+	privateKey string
+}
+
 var continuous = &cobra.Command{
 	Use:   "continuous",
 	Short: "Run load test with cleanup and funding",
@@ -145,7 +153,7 @@ func runOnce(testAccounts []CreatedAccounts, client1 *ethclient.Client, flip boo
 }
 
 func fundAccounts(testAccounts []CreatedAccounts, client1 *ethclient.Client) {
-	balance, err := ethereum.GetWeiBalance(parentAddress, ethereum.Client)
+	balance, err := ethereum.GetWeiBalance(parentAddress, client1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -172,7 +180,7 @@ func fundAccounts(testAccounts []CreatedAccounts, client1 *ethclient.Client) {
 	// verifying the balances
 	for i := 0; i < len(testAccounts); i++ {
 		tAddress := testAccounts[i]
-		balance, err := ethereum.GetWeiBalance(tAddress.address, ethereum.Client)
+		balance, err := ethereum.GetWeiBalance(tAddress.address, client1)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -191,7 +199,7 @@ func fundAccounts(testAccounts []CreatedAccounts, client1 *ethclient.Client) {
 }
 
 func cleanup(testAccounts []CreatedAccounts, client1 *ethclient.Client) {
-	balance, err := ethereum.GetWeiBalance(parentAddress, ethereum.Client)
+	balance, err := ethereum.GetWeiBalance(parentAddress, client1)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -204,7 +212,7 @@ func cleanup(testAccounts []CreatedAccounts, client1 *ethclient.Client) {
 		// 1000000000000000000000 = 1000 ETH
 		fmt.Printf("Current Index %d / %d\n", k, len(testAccounts))
 
-		balance, err := ethereum.GetWeiBalance(tAddress.address, ethereum.Client)
+		balance, err := ethereum.GetWeiBalance(tAddress.address, client1)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -224,7 +232,7 @@ func cleanup(testAccounts []CreatedAccounts, client1 *ethclient.Client) {
 
 	// verifying the balances
 	for _, tAddress := range testAccounts {
-		balance, err := ethereum.GetWeiBalance(tAddress.address, ethereum.Client)
+		balance, err := ethereum.GetWeiBalance(tAddress.address, client1)
 		if err != nil {
 			log.Fatal(err)
 		}
