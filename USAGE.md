@@ -14,6 +14,6 @@
 ```
 
 ### run it
-go run .
+`go run . continuous`
 
 
